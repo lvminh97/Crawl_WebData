@@ -18,23 +18,24 @@ sleep(5)
 data = []
 
 # Crawl data from all pages
-for page in range(5):   # demo with 5 pages
+for page in range(79):
     for i in range(10):
-        row = browser.find_element(by = By.ID, value = "dnn_ctr507_HoiDap_dgDanhSachHoSo_ctl00__" + str(i))
-        if row is None:
+        try:
+            row = browser.find_element(by = By.ID, value = "dnn_ctr507_HoiDap_dgDanhSachHoSo_ctl00__" + str(i))
+            cols = row.find_elements(by = By.TAG_NAME, value = "td")
+            temp = {}
+            temp['id'] = cols[0].text
+            tmpStr = cols[1].find_element(by = By.TAG_NAME, value = "a").text
+            tmpStr = tmpStr.strip()
+            tmpStr.replace("&nbsp;", "")
+            temp['cauhoi'] = tmpStr
+            tmpStr = cols[2].text
+            tmpStr = tmpStr.strip()
+            tmpStr.replace("&nbsp;", "")
+            temp['linhvuc'] = tmpStr
+            data += [temp]
+        except:
             continue
-        cols = row.find_elements(by = By.TAG_NAME, value = "td")
-        temp = {}
-        temp['id'] = cols[0].text
-        tmpStr = cols[1].find_element(by = By.TAG_NAME, value = "a").text
-        tmpStr = tmpStr.strip()
-        tmpStr.replace("&nbsp;", "")
-        temp['cauhoi'] = tmpStr
-        tmpStr = cols[2].text
-        tmpStr = tmpStr.strip()
-        tmpStr.replace("&nbsp;", "")
-        temp['linhvuc'] = tmpStr
-        data += [temp]
     
     print("Finish %d/79 pages" % (page + 1))        
     browser.find_element(by = By.CLASS_NAME, value = "rgPageNext").click()
