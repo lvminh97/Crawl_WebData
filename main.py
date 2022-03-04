@@ -5,12 +5,15 @@
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from time import sleep
 
 __DRIVERPATH__      = "driver/chromedriver.exe"
 __URL__             = "https://dichvucong.quangninh.gov.vn/Default.aspx?tabid=119";
 
 browser = webdriver.Chrome(executable_path = __DRIVERPATH__)
 browser.get(__URL__)
+# Wait 5 seconds for full loading of website
+sleep(5)
 
 data = []
 
@@ -32,8 +35,10 @@ for page in range(5):   # demo with 5 pages
         tmpStr.replace("&nbsp;", "")
         temp['linhvuc'] = tmpStr
         data += [temp]
-        
+    
+    print("Finish %d/79 pages" % (page + 1))        
     browser.find_element(by = By.CLASS_NAME, value = "rgPageNext").click()
+    sleep(1)
 
 print(data)
 
